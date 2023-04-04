@@ -1,0 +1,51 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}
+	{% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock title %}
+
+{% block content %}
+
+	<div class="row">
+		{% comment %} Sidebar {% endcomment %}
+		<div class="col-3 p-2 border-end min-vh-100">
+			<h3>Categories</h3>
+			<ul>
+				<li class="p-1 {% if not category %}border border-2 border-primary rounded{% endif %}">
+					<a href="{% url 'shop:product_list' %}">All</a>
+				</li>
+				{% for c in categories %}
+					<li class="p-1 {% if c == category %}border border-2 border-primary rounded{% endif %}">
+						<a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% comment %} Main {% endcomment %}
+		<div class="col-9 p-2">
+			<h1 class="border-bottom mb-3">
+				{% if category %}{{ category.name }}{% else %}All Products{% endif %}
+			</h1>
+
+			<div class="card-group">
+				{% for product in products %}
+					<a href="{{ product.get_absolute_url }}">
+						<div class="me-2 mb-2 card text-center text-black" style="max-width: 18rem;">
+							<img
+							src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}"
+							class="card-img-top"
+							alt="{{ product.name }}">
+							<div class="card-body">
+								<h5 class="card-title">{{ product.name }}</h5>
+								<p class="card-text">${{ product.price }}</p>
+							</div>
+						</div>
+					</a>
+				{% endfor %}
+			</div>
+		</div>
+
+	</div>	
+
+{% endblock content %}

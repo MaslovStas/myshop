@@ -1,0 +1,29 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block title %}{{ product.name }}{% endblock title %}
+
+{% block content %}
+
+	<div class="row p-2">
+		<div class="col-lg-4 col-md-6 col-sm-12">
+			<img
+			src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}"
+			alt="{{ product.name }}"
+			class="img-fluid">
+		</div>
+		<div class="col-lg-8 col-md-6 col-sm-12">
+			<h1>{{ product.name }}</h1>
+			<h4><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h4>
+			<p class="fw-bold fs-4">${{ product.price }}</p>
+			{{ product.description|linebreaks }}
+			<form class="fw-bold" action="{% url 'cart:cart_add' product.id %}" method="post">
+				{{ form }}
+				{% csrf_token %}
+				<button class="btn btn-primary" type="submit">Add to cart</button>
+			</form>
+		</div>
+	</div>
+
+{% endblock content %}

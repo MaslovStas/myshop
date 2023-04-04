@@ -1,0 +1,37 @@
+{% extends 'shop/base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Checkout{% endblock title %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col p-3">
+			<h1 class="text-center">Checkout</h1>
+		</div>
+	</div>
+	<div class="row p-2 justify-content-around">
+		{% comment %} Form {% endcomment %}
+		<div class="p-4 col-lg-4 col-md-6 col-sm-12 border border-2 rounded">
+			<form action="{% url 'orders:order_create' %}" method="post">
+				{% bootstrap_form form %}
+				{% csrf_token %}
+				{% bootstrap_button "Place order" button_type="submit" button_class="btn-primary w-100" %}
+			</form>
+		</div>
+		{% comment %} Your Order {% endcomment %}
+		<div class="p-4 col-lg-4 col-md-6 col-sm-12 border border-2 rounded">
+			<h3 class="text-primary mb-5 text-center">Your order</h2>
+				<ul class="border-bottom mb-5">
+					{% for item in cart %}
+						<li class="mb-2 d-flex justify-content-between fw-bold">
+							<span><i class="bi bi-check"></i>{{ item.quantity }} x {{ item.product.name }}</span>
+							<span>${{ item.total_price }}</span>
+						</li>
+					{% endfor %}
+				</ul>
+				<p class="fw-bold text-end">Total: ${{ cart.get_total_price }}</p>
+		</div>
+	</div>
+
+{% endblock content %}

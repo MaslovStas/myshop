@@ -1,0 +1,82 @@
+{% load static %}
+{% load django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}{% endblock title %}</title>
+
+	{% bootstrap_css %}
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+	{% comment %} NavBar {% endcomment %}
+	<nav
+		class="navbar navbar-expand-md navbar-dark bg-dark"
+	>
+		<div class="container-fluid">
+			<a class="navbar-brand" href="{% url 'shop:product_list' %}">MyShop</a>
+			<button
+				class="navbar-toggler"
+				type="button"
+				data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent"
+				aria-expanded="false"
+				aria-label="Переключатель навигации"
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav m-auto mb-2 mb-md-0 fw-bold">
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link</a>
+					</li>
+				</ul>
+				<div class="d-flex align-items-center">
+					{% comment %} Cart Preview {% endcomment %}
+					{% with total_items=cart|length %}
+					<a class="position-relative me-3"
+					href="{% url 'cart:cart_detail' %}">
+						<i class="bi bi-basket3 fs-4 text-white"></i>
+						{% if total_items > 0 %}
+							<span class="position-absolute top-0 start-50 badge rounded-pill bg-success">
+								{{ total_items }}
+							</span>
+						{% endif %}
+					</a>
+				{% endwith %}
+					{% comment %} Login {% endcomment %}
+					<a href="#"><i class="bi bi-person fs-2 text-white"></i></a>
+				</div>
+			</div>
+		</div>
+	</nav>
+	{% comment %} Message {% endcomment %}
+	{% bootstrap_messages %}
+
+	<div class="container-fluid">
+		{% comment %} Content {% endcomment %}
+		{% block content %}{% endblock content %}
+	</div>
+
+	{% bootstrap_javascript %}
+	<script>
+		document.addEventListener("DOMContentLoaded", (event) => {
+			// DOM Loaded
+			{% block domready %}
+			{% endblock domready %}
+		})
+	</script>
+</body>
+</html>
